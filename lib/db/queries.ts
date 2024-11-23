@@ -6,14 +6,14 @@ import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 
 import {
-  user,
   chat,
-  type User,
   document,
-  type Suggestion,
-  suggestion,
   type Message,
   message,
+  type Suggestion,
+  suggestion,
+  user,
+  type User,
   vote,
 } from './schema';
 
@@ -35,6 +35,7 @@ export async function getUser(email: string): Promise<Array<User>> {
 }
 
 export async function createUser(email: string, password: string) {
+  // https://www.npmjs.com/package/bcrypt-ts
   const salt = genSaltSync(10);
   const hash = hashSync(password, salt);
 
@@ -234,8 +235,8 @@ export async function deleteDocumentsByIdAfterTimestamp({
       .where(
         and(
           eq(suggestion.documentId, id),
-          gt(suggestion.documentCreatedAt, timestamp),
-        ),
+          gt(suggestion.documentCreatedAt, timestamp)
+        )
       );
 
     return await db
@@ -243,7 +244,7 @@ export async function deleteDocumentsByIdAfterTimestamp({
       .where(and(eq(document.id, id), gt(document.createdAt, timestamp)));
   } catch (error) {
     console.error(
-      'Failed to delete documents by id after timestamp from database',
+      'Failed to delete documents by id after timestamp from database'
     );
     throw error;
   }
@@ -274,7 +275,7 @@ export async function getSuggestionsByDocumentId({
       .where(and(eq(suggestion.documentId, documentId)));
   } catch (error) {
     console.error(
-      'Failed to get suggestions by document version from database',
+      'Failed to get suggestions by document version from database'
     );
     throw error;
   }
