@@ -218,16 +218,6 @@ export function getMostRecentUserMessage(messages: Array<CoreMessage>) {
   return userMessages.at(-1);
 }
 
-export function getDocumentTimestampByIndex(
-  documents: Array<Document>,
-  index: number
-) {
-  if (!documents) return new Date();
-  if (index > documents.length) return new Date();
-
-  return documents[index].createdAt;
-}
-
 export function getMessageIdFromAnnotations(message: Message) {
   if (!message.annotations) return message.id;
 
