@@ -19,12 +19,27 @@ interface ApplicationError extends Error {
   status: number;
 }
 
-export const fetcher = async (url: string) => {
-  const res = await fetch(url);
+interface FetcherOptions {
+  method?: 'GET' | 'POST';
+  body?: any;
+  headers?: HeadersInit;
+}
+
+export const fetcher = async (url: string, options?: FetcherOptions) => {
+  const { method = 'GET', body, headers } = options || {};
+
+  const res = await fetch(url, {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+      ...headers,
+    },
+    body: method === 'POST' ? JSON.stringify(body) : undefined,
+  });
 
   if (!res.ok) {
     const error = new Error(
-      'An error occurred while fetching the data.',
+      'An error occurred while fetching the data.'
     ) as ApplicationError;
 
     error.info = await res.json();
@@ -64,7 +79,7 @@ function addToolMessageToChat({
         ...message,
         toolInvocations: message.toolInvocations.map((toolInvocation) => {
           const toolResult = toolMessage.content.find(
-            (tool) => tool.toolCallId === toolInvocation.toolCallId,
+            (tool) => tool.toolCallId === toolInvocation.toolCallId
           );
 
           if (toolResult) {
@@ -85,7 +100,7 @@ function addToolMessageToChat({
 }
 
 export function convertToUIMessages(
-  messages: Array<DBMessage>,
+  messages: Array<DBMessage>
 ): Array<Message> {
   return messages.reduce((chatMessages: Array<Message>, message) => {
     if (message.role === 'tool') {
@@ -127,7 +142,7 @@ export function convertToUIMessages(
 }
 
 export function sanitizeResponseMessages(
-  messages: Array<CoreToolMessage | CoreAssistantMessage>,
+  messages: Array<CoreToolMessage | CoreAssistantMessage>
 ): Array<CoreToolMessage | CoreAssistantMessage> {
   const toolResultIds: Array<string> = [];
 
@@ -150,8 +165,8 @@ export function sanitizeResponseMessages(
       content.type === 'tool-call'
         ? toolResultIds.includes(content.toolCallId)
         : content.type === 'text'
-          ? content.text.length > 0
-          : true,
+        ? content.text.length > 0
+        : true
     );
 
     return {
@@ -161,7 +176,7 @@ export function sanitizeResponseMessages(
   });
 
   return messagesBySanitizedContent.filter(
-    (message) => message.content.length > 0,
+    (message) => message.content.length > 0
   );
 }
 
@@ -182,7 +197,7 @@ export function sanitizeUIMessages(messages: Array<Message>): Array<Message> {
     const sanitizedToolInvocations = message.toolInvocations.filter(
       (toolInvocation) =>
         toolInvocation.state === 'result' ||
-        toolResultIds.includes(toolInvocation.toolCallId),
+        toolResultIds.includes(toolInvocation.toolCallId)
     );
 
     return {
@@ -194,7 +209,7 @@ export function sanitizeUIMessages(messages: Array<Message>): Array<Message> {
   return messagesBySanitizedToolInvocations.filter(
     (message) =>
       message.content.length > 0 ||
-      (message.toolInvocations && message.toolInvocations.length > 0),
+      (message.toolInvocations && message.toolInvocations.length > 0)
   );
 }
 
@@ -205,7 +220,7 @@ export function getMostRecentUserMessage(messages: Array<CoreMessage>) {
 
 export function getDocumentTimestampByIndex(
   documents: Array<Document>,
-  index: number,
+  index: number
 ) {
   if (!documents) return new Date();
   if (index > documents.length) return new Date();

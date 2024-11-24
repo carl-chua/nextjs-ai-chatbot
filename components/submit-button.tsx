@@ -20,17 +20,17 @@ export function SubmitButton({
       type={pending ? 'button' : 'submit'}
       aria-disabled={pending || isSuccessful}
       disabled={pending || isSuccessful}
-      className="relative"
+      className='relative'
     >
       {children}
 
       {(pending || isSuccessful) && (
-        <span className="animate-spin absolute right-4">
+        <span className='animate-spin absolute right-4'>
           <LoaderIcon />
         </span>
       )}
 
-      <output aria-live="polite" className="sr-only">
+      <output aria-live='polite' className='sr-only'>
         {pending || isSuccessful ? 'Loading' : 'Submit form'}
       </output>
     </Button>

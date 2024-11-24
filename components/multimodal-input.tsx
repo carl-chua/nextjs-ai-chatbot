@@ -1,11 +1,6 @@
 'use client';
 
-import type {
-  Attachment,
-  ChatRequestOptions,
-  CreateMessage,
-  Message,
-} from 'ai';
+import type { ChatRequestOptions, Message } from 'ai';
 import cx from 'classnames';
 import type React from 'react';
 import {
@@ -30,11 +25,7 @@ export function MultimodalInput({
   setInput,
   isLoading,
   stop,
-  attachments,
-  setAttachments,
-  messages,
   setMessages,
-  append,
   handleSubmit,
   className,
 }: {
@@ -43,14 +34,8 @@ export function MultimodalInput({
   setInput: (value: string) => void;
   isLoading: boolean;
   stop: () => void;
-  attachments: Array<Attachment>;
-  setAttachments: Dispatch<SetStateAction<Array<Attachment>>>;
   messages: Array<Message>;
   setMessages: Dispatch<SetStateAction<Array<Message>>>;
-  append: (
-    message: Message | CreateMessage,
-    chatRequestOptions?: ChatRequestOptions
-  ) => Promise<string | null | undefined>;
   handleSubmit: (
     event?: {
       preventDefault?: () => void;
@@ -106,24 +91,14 @@ export function MultimodalInput({
   const submitForm = useCallback(() => {
     window.history.replaceState({}, '', `/chat/${chatId}`);
 
-    handleSubmit(undefined, {
-      experimental_attachments: attachments,
-    });
+    handleSubmit(undefined);
 
-    setAttachments([]);
     setLocalStorageInput('');
 
     if (width && width > 768) {
       textareaRef.current?.focus();
     }
-  }, [
-    attachments,
-    handleSubmit,
-    setAttachments,
-    setLocalStorageInput,
-    width,
-    chatId,
-  ]);
+  }, [handleSubmit, setLocalStorageInput, width, chatId]);
 
   return (
     <div className='relative w-full flex flex-col gap-4'>

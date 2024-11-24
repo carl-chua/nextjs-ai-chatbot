@@ -17,9 +17,9 @@ export const {
   signOut,
 } = NextAuth({
   ...authConfig,
+  // https://next-auth.js.org/providers/credentials#options
   providers: [
     // Email and password
-    //https://next-auth.js.org/providers/credentials#options
     Credentials({
       credentials: {},
       async authorize({ email, password }: any) {
@@ -33,6 +33,7 @@ export const {
       },
     }),
   ],
+  // https://next-auth.js.org/configuration/callbacks
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
@@ -48,6 +49,7 @@ export const {
       session: ExtendedSession;
       token: any;
     }) {
+      // append the user id to the session
       if (session.user) {
         session.user.id = token.id as string;
       }

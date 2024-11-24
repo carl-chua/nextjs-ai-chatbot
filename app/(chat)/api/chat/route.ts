@@ -22,22 +22,6 @@ import { generateTitleFromUserMessage } from '../../actions';
 // Allow streaming responses up to 60 seconds
 export const maxDuration = 60;
 
-type AllowedTools =
-  | 'createDocument'
-  | 'updateDocument'
-  | 'requestSuggestions'
-  | 'getWeather';
-
-const blocksTools: AllowedTools[] = [
-  'createDocument',
-  'updateDocument',
-  'requestSuggestions',
-];
-
-const weatherTools: AllowedTools[] = ['getWeather'];
-
-const allTools: AllowedTools[] = [...blocksTools, ...weatherTools];
-
 export async function POST(request: Request) {
   const {
     id,

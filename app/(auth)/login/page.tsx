@@ -16,7 +16,7 @@ export default function Page() {
   const [email, setEmail] = useState('');
   const [isSuccessful, setIsSuccessful] = useState(false);
 
-  // Executes login when form is submitted
+  // useActionState is a Hook that allows you to update state based on the result of a form action.
   const [state, formAction] = useActionState<LoginActionState, FormData>(
     login,
     {
