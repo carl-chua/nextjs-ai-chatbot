@@ -22,6 +22,7 @@ import { generateTitleFromUserMessage } from '../../actions';
 // Allow streaming responses up to 60 seconds
 export const maxDuration = 60;
 
+// https://sdk.vercel.ai/docs/getting-started/nextjs-app-router
 export async function POST(request: Request) {
   const {
     id,
