@@ -71,11 +71,11 @@ export async function POST(request: Request) {
     model: customModel(model.apiIdentifier),
     system: systemPrompt, //The system prompt to use that specifies the behavior of the model.
     messages: coreMessages,
-    onFinish: async ({ responseMessages }) => {
+    onFinish: async ({ response }) => {
       if (session.user?.id) {
         try {
           await saveMessages({
-            messages: responseMessages.map((message) => {
+            messages: response.messages.map((message) => {
               const messageId = generateUUID();
 
               if (message.role === 'assistant') {
